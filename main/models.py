@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class UserProfile(AbstractUser):
+class User(AbstractUser):
     description = models.TextField(max_length=300)
     date_of_birth = models.DateField()
     profile_photo = models.ImageField(null=True, blank=True)
@@ -19,7 +19,7 @@ class Post(models.Model):
     photo = models.ImageField()
     description = models.TextField(max_length=500, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Post'
@@ -32,7 +32,7 @@ class Post(models.Model):
 class Comment(models.Model):
     text = models.TextField(max_length=500)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -45,7 +45,7 @@ class Comment(models.Model):
 
 class Like(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -55,7 +55,7 @@ class Like(models.Model):
 
 class Dislike(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -64,6 +64,6 @@ class Dislike(models.Model):
 
 
 class Followers(models.Model):
-    follower = models.ForeignKey('UserProfile', related_name='follower', on_delete=models.CASCADE)
-    following = models.ForeignKey('UserProfile', related_name='following', on_delete=models.CASCADE)
+    follower = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
+    following = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
