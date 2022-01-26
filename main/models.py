@@ -1,12 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class UserProfile(AbstractUser):
     description = models.TextField(max_length=300)
     date_of_birth = models.DateField()
-    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
     profile_photo = models.ImageField(null=True, blank=True)
 
     class Meta:
@@ -14,13 +12,13 @@ class UserProfile(models.Model):
         verbose_name_plural = 'Users'
 
     def __str__(self):
-        return self.user.username
+        return self.username
 
 
 class Post(models.Model):
     photo = models.ImageField()
     description = models.TextField(max_length=500, blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
 
     class Meta:
@@ -35,7 +33,7 @@ class Comment(models.Model):
     text = models.TextField(max_length=500)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Comment'
@@ -48,7 +46,7 @@ class Comment(models.Model):
 class Like(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Like'
@@ -58,7 +56,7 @@ class Like(models.Model):
 class Dislike(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Dislike'
@@ -68,4 +66,4 @@ class Dislike(models.Model):
 class Followers(models.Model):
     follower = models.ForeignKey('UserProfile', related_name='follower', on_delete=models.CASCADE)
     following = models.ForeignKey('UserProfile', related_name='following', on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
