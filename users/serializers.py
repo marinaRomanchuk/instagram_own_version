@@ -1,9 +1,21 @@
 from rest_framework import serializers
 
-from .models import Followers, User
+from users.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "first_name",
+            "last_name",
+            "description",
+            "profile_photo",
+        ]
+
+
+class UserPrivateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -14,9 +26,3 @@ class UserSerializer(serializers.ModelSerializer):
             "date_of_birth",
             "profile_photo",
         ]
-
-
-class FollowersSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Followers
-        fields = ["follower", "following", "timestamp"]
