@@ -28,7 +28,7 @@ class UserPrivateSerializer(UserPublicSerializer):
         ]
 
 
-class SetupSerializer(serializers.Serializer):
+class SignupSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
