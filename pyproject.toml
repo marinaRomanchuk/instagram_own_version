@@ -14,6 +14,7 @@ pylama = "^8.3.7"
 black = "^21.12b0"
 mypy = "^0.931"
 djangorestframework = "^3.13.1"
+Pillow = "^9.0.1"
 
 [tool.poetry.dev-dependencies]
 
