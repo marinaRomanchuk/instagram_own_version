@@ -38,6 +38,13 @@ class SignupSerializer(serializers.Serializer):
         model = User
         fields = ("username", "password")
 
+    def validate(self, attrs):
+        if User.objects.filter(username=attrs["username"]).exists():
+            raise serializers.ValidationError(
+                {"username": "There is a user with the same username."}
+            )
+        return attrs
+
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data["username"],
