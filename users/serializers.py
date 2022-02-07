@@ -54,3 +54,15 @@ class SignupSerializer(serializers.Serializer):
         user.save()
 
         return user
+
+
+class UpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "description",
+            "date_of_birth",
+            "profile_photo",
+        ]
