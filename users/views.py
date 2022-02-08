@@ -1,8 +1,9 @@
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 
+from instagram_own_version.permissions import IsOwner
 from users.models import User
-from users.serializers import SignupSerializer, UpdateSerializer, UserPrivateSerializer
+from users.serializers import SignupSerializer, UserPrivateSerializer
 
 
 class SignupView(generics.CreateAPIView):
@@ -10,18 +11,8 @@ class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
 
 
-class GetView(generics.RetrieveAPIView):
+class UpdateProfileView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwner,)
     serializer_class = UserPrivateSerializer
-    lookup_field = "username"
-
-
-class UpdateView(generics.UpdateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
-    serializer_class = UpdateSerializer
-    lookup_field = "username"
-
-    def get_object(self):
-        return self.request.user
+    lookup_field = "id"

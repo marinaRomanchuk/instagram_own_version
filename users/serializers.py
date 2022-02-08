@@ -17,6 +17,8 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
 
 class UserPrivateSerializer(UserPublicSerializer):
+    username = serializers.CharField(write_only=True)
+
     class Meta(UserPublicSerializer.Meta):
         fields = [
             "username",
@@ -25,6 +27,7 @@ class UserPrivateSerializer(UserPublicSerializer):
             "description",
             "date_of_birth",
             "profile_photo",
+            "email",
         ]
 
 
@@ -54,15 +57,3 @@ class SignupSerializer(serializers.Serializer):
         user.save()
 
         return user
-
-
-class UpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            "first_name",
-            "last_name",
-            "description",
-            "date_of_birth",
-            "profile_photo",
-        ]
