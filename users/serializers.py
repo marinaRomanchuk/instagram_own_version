@@ -17,7 +17,7 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
 
 class UserPrivateSerializer(UserPublicSerializer):
-    username = serializers.CharField(write_only=True)
+    username = serializers.CharField(read_only=True)
 
     class Meta(UserPublicSerializer.Meta):
         fields = [
