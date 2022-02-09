@@ -5,9 +5,12 @@ from users.models import User
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = User
         fields = [
+            "id",
             "username",
             "first_name",
             "last_name",
@@ -18,9 +21,11 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
 class UserPrivateSerializer(UserPublicSerializer):
     username = serializers.CharField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
 
     class Meta(UserPublicSerializer.Meta):
         fields = [
+            "id",
             "username",
             "first_name",
             "last_name",
@@ -36,10 +41,11 @@ class SignupSerializer(serializers.Serializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
     )
+    id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = User
-        fields = ("username", "password")
+        fields = ("username", "password", "id")
 
     def validate(self, attrs):
         if User.objects.filter(username=attrs["username"]).exists():

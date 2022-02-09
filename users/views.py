@@ -15,7 +15,7 @@ class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
 
 
-class UpdateProfileView(generics.RetrieveUpdateAPIView):
+class RetrieveUpdateUserProfileView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     permission_classes = (IsOwner,)
 
