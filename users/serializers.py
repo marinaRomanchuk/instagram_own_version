@@ -7,10 +7,7 @@ from users.models import User
 
 class UserPublicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    profile_photo = Base64ImageField(
-        max_length=None,
-        use_url=True,
-    )
+    profile_photo = Base64ImageField()
 
     class Meta:
         model = User
@@ -26,11 +23,6 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
 class UserPrivateSerializer(UserPublicSerializer):
     username = serializers.CharField(read_only=True)
-    id = serializers.IntegerField(read_only=True)
-    profile_photo = Base64ImageField(
-        max_length=None,
-        use_url=True,
-    )
 
     class Meta(UserPublicSerializer.Meta):
         fields = [

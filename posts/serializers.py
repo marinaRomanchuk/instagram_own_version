@@ -7,7 +7,7 @@ from users.serializers import UserPublicSerializer
 
 class PostSerializer(serializers.ModelSerializer):
     users = UserPublicSerializer(many=True, read_only=True)
-    photo = Base64ImageField(max_length=None, use_url=True)
+    photo = Base64ImageField()
 
     class Meta:
         model = Post
