@@ -1,4 +1,5 @@
 from django.contrib.auth.password_validation import validate_password
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
 from users.models import User
@@ -6,6 +7,10 @@ from users.models import User
 
 class UserPublicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    profile_photo = Base64ImageField(
+        max_length=None,
+        use_url=True,
+    )
 
     class Meta:
         model = User
@@ -22,6 +27,10 @@ class UserPublicSerializer(serializers.ModelSerializer):
 class UserPrivateSerializer(UserPublicSerializer):
     username = serializers.CharField(read_only=True)
     id = serializers.IntegerField(read_only=True)
+    profile_photo = Base64ImageField(
+        max_length=None,
+        use_url=True,
+    )
 
     class Meta(UserPublicSerializer.Meta):
         fields = [

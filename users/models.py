@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 class User(AbstractUser):
     description = models.TextField(max_length=300, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    profile_photo = models.ImageField(null=True, blank=True)
+    profile_photo = models.ImageField(null=True, blank=True, upload_to="profile")
 
     class Meta:
         verbose_name = "User"
