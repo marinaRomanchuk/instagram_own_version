@@ -17,9 +17,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         try:
             user_id = int(self.request.GET.get("user_id"))
-        except ValueError:
-            user_id = None
-        except TypeError:
+        except (ValueError, TypeError):
             user_id = None
         show_feed = self.request.GET.get("feed") == "true"
         if user_id:
