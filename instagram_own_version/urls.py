@@ -24,7 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("users.urls")),
     path("api/", include("posts.urls")),
-    url(r"^api/token/", token_views.obtain_auth_token),
+    url(r"^api/token/", token_views.obtain_auth_token, name="token"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
