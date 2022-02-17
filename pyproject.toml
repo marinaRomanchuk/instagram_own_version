@@ -11,8 +11,6 @@ psycopg2 = "^2.9.3"
 djangorestframework = "^3.13.1"
 Pillow = "^9.0.1"
 drf-extra-fields = "^3.2.1"
-pytest-cov = "^3.0.0"
-coverage = "^6.3.1"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.10.1"
@@ -20,6 +18,9 @@ pylama = "^8.3.7"
 mypy = "^0.931"
 black = "21.12b0"
 pre-commit = "^2.17.0"
+pytest = "^7.0.1"
+coverage = "^6.3.1"
+pytest-cov = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
