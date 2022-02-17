@@ -6,21 +6,7 @@ from rest_framework.test import APITestCase
 from users.models import User
 
 
-class CreateUserTest(APITestCase):
-    def setUp(self):
-        self.signup_data = {"username": "harrypotter", "password": "hogwarts934"}
-        self.signup_data_another = {"username": "robinsoncrusoe", "password": "123"}
-
-    def test_can_create_user(self):
-        response = self.client.post(reverse("signup"), self.signup_data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_can_not_create_user(self):
-        response = self.client.post(reverse("signup"), self.signup_data_another)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-
-class RetrieveUserTest(APITestCase):
+class UserTest(APITestCase):
     def setUp(self):
         self.signup_data = {"username": "harrypotter", "password": "hogwarts934"}
         self.client.post(reverse("signup"), self.signup_data)
@@ -53,6 +39,22 @@ class RetrieveUserTest(APITestCase):
         self.assertEqual(response.data["token"], token.key)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
 
+
+class CreateUserTest(APITestCase):
+    def setUp(self):
+        self.signup_data = {"username": "harrypotter", "password": "hogwarts934"}
+        self.signup_data_another = {"username": "robinsoncrusoe", "password": "123"}
+
+    def test_can_create_user(self):
+        response = self.client.post(reverse("signup"), self.signup_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_can_not_create_user(self):
+        response = self.client.post(reverse("signup"), self.signup_data_another)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class RetrieveUserTest(UserTest):
     def test_can_retrieve_self_user(self):
         self.authenticate(self.signup_data)
         response = self.client.get(
@@ -81,29 +83,10 @@ class RetrieveUserTest(APITestCase):
         self.assertEqual(response.json(), self.data)
 
 
-class UpdateUserTest(APITestCase):
+class UpdateUserTest(UserTest):
     def setUp(self):
-        self.signup_data = {"username": "harrypotter", "password": "hogwarts934"}
-        self.client.post(reverse("signup"), self.signup_data)
+        super().setUp()
         self.data = {"first_name": "Harry", "last_name": "Potter", "description": "Boy"}
-
-        self.signup_data_another = {
-            "username": "robinsoncrusoe",
-            "password": "daniel1719",
-        }
-        self.client.post(reverse("signup"), self.signup_data_another)
-
-    def get_argument(self, username):
-        return {"pk": User.objects.get(username=username).id}
-
-    def authenticate(self, login_data):
-        response = self.client.post(reverse("token"), login_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        user = User.objects.get(username=login_data.get("username"))
-        token = Token.objects.get(user=user)
-        self.assertEqual(response.data["token"], token.key)
-        self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
 
     def test_can_update_self_user(self):
         self.authenticate(self.signup_data)
