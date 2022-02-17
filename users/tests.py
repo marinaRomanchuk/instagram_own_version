@@ -53,8 +53,17 @@ class CreateUserTest(APITestCase):
         response = self.client.post(reverse("signup"), self.signup_data_another)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+        self.test_can_create_user()
+
+        response = self.client.post(reverse("signup"), self.signup_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 class RetrieveUserTest(UserTest):
+    def test_str(self):
+        user = User.objects.get(username=self.signup_data.get("username"))
+        self.assertEqual(str(user), user.username)
+
     def test_can_retrieve_self_user(self):
         self.authenticate(self.signup_data)
         response = self.client.get(
