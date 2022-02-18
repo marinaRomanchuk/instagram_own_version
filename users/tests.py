@@ -26,6 +26,14 @@ class UserTest(APITestCase):
             "password": "daniel1719",
         }
         self.client.post(reverse("signup"), self.signup_data_another)
+        self.data_another_user = {
+            "first_name": "",
+            "last_name": "",
+            "description": None,
+            "username": self.signup_data_another.get("username"),
+            "profile_photo": None,
+            "id": User.objects.get(username="robinsoncrusoe").id,
+        }
 
     def get_argument(self, username):
         return {"pk": User.objects.get(username=username).id}
@@ -53,7 +61,7 @@ class CreateUserTest(APITestCase):
         response = self.client.post(reverse("signup"), self.signup_data_another)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        self.test_can_create_user()
+        response = self.client.post(reverse("signup"), self.signup_data)
 
         response = self.client.post(reverse("signup"), self.signup_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -81,15 +89,7 @@ class RetrieveUserTest(UserTest):
             )
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        self.data.pop("date_of_birth")
-        self.data.pop("email")
-        self.data["username"] = self.signup_data_another.get("username")
-        self.data["id"] = User.objects.get(
-            username=self.signup_data_another.get("username")
-        ).id
-
-        self.assertEqual(response.json(), self.data)
+        self.assertEqual(response.json(), self.data_another_user)
 
 
 class UpdateUserTest(UserTest):

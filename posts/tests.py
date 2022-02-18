@@ -15,41 +15,54 @@ class PostTest(APITestCase):
             "password": "daniel1719",
         }
         self.client.post(reverse("signup"), self.signup_data)
+        self.signup_data["id"] = User.objects.get(
+            username=self.signup_data.get("username")
+        ).id
         self.client.post(reverse("signup"), self.signup_data_another)
-        post = Post(
-            photo="data:image/gif;base64,R0lGODlhEAAOALMAAOazToeHh0tLS/7LZv/0jvb29t"
-            "/f3//Ub//ge8WSLf/rhf/",
-            description="picture",
-            user=User.objects.get(username=self.signup_data.get("username")),
-        )
-        post.save()
-        self.timestamp = post.timestamp
+        self.signup_data_another["id"] = User.objects.get(
+            username=self.signup_data_another.get("username")
+        ).id
 
-        follower = Followers(
-            follower=User.objects.get(
-                username=self.signup_data_another.get("username")
-            ),
-            following=User.objects.get(username=self.signup_data.get("username")),
-        )
-        follower.save()
+        self.data = {
+            "photo": "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAH"
+            "ElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",
+            "description": "red dot",
+        }
 
     def authenticate(self, login_data):
         response = self.client.post(reverse("token"), login_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.user = User.objects.get(username=login_data.get("username"))
+        self.user = User.objects.get(id=login_data.get("id"))
         token = Token.objects.get(user=self.user)
         self.assertEqual(response.data["token"], token.key)
         self.client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
 
 
-class RetrievePostTest(PostTest):
-    def test_str(self):
-        post = Post.objects.get(timestamp=self.timestamp)
-        self.assertEqual(str(post), f"{post.user.username}'s post")
+class CreatePostTest(PostTest):
+    def test_can_create_post(self):
+        self.authenticate(self.signup_data)
+        response = self.client.post(reverse("create-post"), self.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 class ListPostTest(PostTest):
+    def setUp(self):
+        super().setUp()
+        self.authenticate(self.signup_data)
+        response = self.client.post(reverse("create-post"), self.data)
+        self.data["timestamp"] = response.json()["timestamp"]
+
+        follower = Followers(
+            follower=User.objects.get(id=self.signup_data_another.get("id")),
+            following=User.objects.get(id=self.signup_data.get("id")),
+        )
+        follower.save()
+
+    def test_str(self):
+        post = Post.objects.get(timestamp=self.data.get("timestamp"))
+        self.assertEqual(str(post), f"{post.user.username}'s post")
+
     def test_can_retrieve_self_list(self):
         self.authenticate(self.signup_data)
         response = self.client.get(reverse("posts-list"), {"user_id": self.user.id})
