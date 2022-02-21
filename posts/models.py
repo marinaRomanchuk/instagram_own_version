@@ -8,8 +8,8 @@ class Post(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = "Post"
-        verbose_name_plural = "Posts"
+        verbose_name: str = "Post"
+        verbose_name_plural: str = "Posts"
 
     def __str__(self):
         return f"{self.user.username}'s post"

@@ -4,19 +4,19 @@ from .models import Followers, User
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display: tuple = (
         "username",
         "first_name",
         "last_name",
         "description",
         "profile_photo",
     )
-    search_fields = ("username", "first_name", "last_name")
+    search_fields: tuple = ("username", "first_name", "last_name")
 
 
 class FollowersAdmin(admin.ModelAdmin):
-    list_display = ("follower", "following", "timestamp")
-    search_fields = ("timestamp", "follower", "following")
+    list_display: tuple = ("follower", "following", "timestamp")
+    search_fields: tuple = ("timestamp", "follower", "following")
 
 
 admin.site.register(User, UserAdmin)

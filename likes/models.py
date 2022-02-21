@@ -7,8 +7,8 @@ class Like(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Like"
-        verbose_name_plural = "Likes"
+        verbose_name: str = "Like"
+        verbose_name_plural: str = "Likes"
 
 
 class Dislike(models.Model):
@@ -17,5 +17,5 @@ class Dislike(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Dislike"
-        verbose_name_plural = "Dislikes"
+        verbose_name: str = "Dislike"
+        verbose_name_plural: str = "Dislikes"

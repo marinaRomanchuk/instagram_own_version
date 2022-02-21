@@ -11,7 +11,7 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
+        fields: list = [
             "id",
             "username",
             "first_name",
@@ -25,7 +25,7 @@ class UserPrivateSerializer(UserPublicSerializer):
     username = serializers.CharField(read_only=True)
 
     class Meta(UserPublicSerializer.Meta):
-        fields = [
+        fields: list = [
             "id",
             "username",
             "first_name",
@@ -46,16 +46,16 @@ class SignupSerializer(serializers.Serializer):
 
     class Meta:
         model = User
-        fields = ("username", "password", "id")
+        fields: tuple = ("username", "password", "id")
 
-    def validate(self, attrs):
+    def validate(self, attrs: dict) -> dict:
         if User.objects.filter(username=attrs["username"]).exists():
             raise serializers.ValidationError(
                 {"username": "There is a user with the same username."}
             )
         return attrs
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> User:
         user = User.objects.create(
             username=validated_data["username"],
         )

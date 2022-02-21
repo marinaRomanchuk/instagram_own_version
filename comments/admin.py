@@ -4,8 +4,8 @@ from .models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("text", "post", "timestamp", "user")
-    search_fields = ("timestamp", "post")
+    list_display: tuple = ("text", "post", "timestamp", "user")
+    search_fields: tuple = ("timestamp", "post")
 
 
 admin.site.register(Comment, CommentAdmin)

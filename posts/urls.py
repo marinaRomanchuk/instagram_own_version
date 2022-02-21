@@ -23,7 +23,7 @@ posts_detail = PostViewSet.as_view(
     }
 )
 
-urlpatterns = [
+urlpatterns: list = [
     url(r"^posts/create/$", post_create, name="create-post"),
     url(r"^posts/$", posts_list, name="posts-list"),
     url(r"^posts/(?P<pk>\d+)/$", posts_detail, name="post-detail"),
