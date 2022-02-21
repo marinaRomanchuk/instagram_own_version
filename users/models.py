@@ -12,8 +12,8 @@ class User(AbstractUser):
     profile_photo = models.ImageField(null=True, blank=True, upload_to="profile")
 
     class Meta:
-        verbose_name: str = "User"
-        verbose_name_plural: str = "Users"
+        verbose_name = "User"
+        verbose_name_plural = "Users"
 
     def __str__(self):
         return self.username

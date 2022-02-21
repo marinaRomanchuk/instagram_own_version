@@ -11,7 +11,7 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields: list = [
+        fields = [
             "id",
             "username",
             "first_name",
@@ -25,7 +25,7 @@ class UserPrivateSerializer(UserPublicSerializer):
     username = serializers.CharField(read_only=True)
 
     class Meta(UserPublicSerializer.Meta):
-        fields: list = [
+        fields = [
             "id",
             "username",
             "first_name",

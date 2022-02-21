@@ -8,8 +8,8 @@ class Comment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name: str = "Comment"
-        verbose_name_plural: str = "Comments"
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
 
     def __str__(self):
         return self.text
