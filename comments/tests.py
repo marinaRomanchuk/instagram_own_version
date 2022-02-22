@@ -53,7 +53,7 @@ class CommentTest(APITestCase):
 class CreateCommentTest(CommentTest):
     def test_can_add_comment(self):
         self.authenticate(self.signup_data)
-        response = self.client.post(reverse("add-comment"), self.comment_data)
+        response = self.client.post(reverse("comments"), self.comment_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -61,7 +61,7 @@ class ListCommentTest(CommentTest):
     def setUp(self):
         super().setUp()
         self.authenticate(self.signup_data)
-        response = self.client.post(reverse("add-comment"), self.comment_data)
+        response = self.client.post(reverse("comments"), self.comment_data)
         self.comment_data["timestamp"] = response.json()["timestamp"]
         self.comment_id = Comment.objects.get(
             timestamp=self.comment_data["timestamp"]
@@ -74,14 +74,14 @@ class ListCommentTest(CommentTest):
     def test_can_retrieve_list_of_comments(self):
         self.authenticate(self.signup_data_another)
         response = self.client.get(
-            reverse("comments-list"), {"post_id": self.post_data["id"]}
+            reverse("comments"), {"post_id": self.post_data["id"]}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), [self.comment_data])
 
     def test_can_retrieve_list_of_all_comments(self):
         self.authenticate(self.signup_data_another)
-        response = self.client.get(reverse("comments-list"))
+        response = self.client.get(reverse("comments"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_can_retrieve_comment(self):

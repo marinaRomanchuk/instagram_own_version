@@ -23,8 +23,6 @@ class CommentViewSet(viewsets.ModelViewSet):
 
         if post_id:
             queryset = queryset.filter(post_id=post_id)
-        else:
-            queryset = queryset.filter(user=request.user)
 
         serializer = CommentSerializer(queryset, many=True)
         return Response(serializer.data)

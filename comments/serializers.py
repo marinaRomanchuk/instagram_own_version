@@ -15,5 +15,4 @@ class CommentSerializer(serializers.ModelSerializer):
         comment = Comment.objects.create(
             text=data["text"], post=data["post"], user=request.user
         )
-        comment.save()
         return comment
