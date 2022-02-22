@@ -1,3 +1,5 @@
+from typing import Dict
+
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
@@ -9,9 +11,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ["photo", "description", "timestamp"]
+        fields: list = ["photo", "description", "timestamp"]
 
-    def create(self, data):
+    def create(self, data: Dict[str, str]) -> Post:
         request = self.context.get("request")
         post = Post.objects.create(
             description=data["description"], photo=data["photo"], user=request.user

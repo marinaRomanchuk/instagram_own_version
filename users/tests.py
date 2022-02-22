@@ -8,7 +8,10 @@ from users.models import User
 
 class UserTest(APITestCase):
     def setUp(self):
-        self.signup_data = {"username": "harrypotter", "password": "hogwarts934"}
+        self.signup_data = {
+            "username": "harrypotter",
+            "password": "hogwarts934",
+        }
         self.client.post(reverse("signup"), self.signup_data)
         self.data = {
             "first_name": "",
@@ -35,7 +38,7 @@ class UserTest(APITestCase):
             "id": User.objects.get(username="robinsoncrusoe").id,
         }
 
-    def get_argument(self, username):
+    def get_argument(self, username: str):
         return {"pk": User.objects.get(username=username).id}
 
     def authenticate(self, login_data):
@@ -50,8 +53,14 @@ class UserTest(APITestCase):
 
 class CreateUserTest(APITestCase):
     def setUp(self):
-        self.signup_data = {"username": "harrypotter", "password": "hogwarts934"}
-        self.signup_data_another = {"username": "robinsoncrusoe", "password": "123"}
+        self.signup_data = {
+            "username": "harrypotter",
+            "password": "hogwarts934",
+        }
+        self.signup_data_another = {
+            "username": "robinsoncrusoe",
+            "password": "123",
+        }
 
     def test_can_create_user(self):
         response = self.client.post(reverse("signup"), self.signup_data)
@@ -75,7 +84,7 @@ class RetrieveUserTest(UserTest):
     def test_can_retrieve_self_user(self):
         self.authenticate(self.signup_data)
         response = self.client.get(
-            reverse("user", kwargs=self.get_argument(self.signup_data.get("username")))
+            reverse("user", kwargs=self.get_argument(self.signup_data["username"]))
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), self.data)
@@ -85,7 +94,7 @@ class RetrieveUserTest(UserTest):
         response = self.client.get(
             reverse(
                 "user",
-                kwargs=self.get_argument(self.signup_data_another.get("username")),
+                kwargs=self.get_argument(self.signup_data_another["username"]),
             )
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -95,12 +104,16 @@ class RetrieveUserTest(UserTest):
 class UpdateUserTest(UserTest):
     def setUp(self):
         super().setUp()
-        self.data = {"first_name": "Harry", "last_name": "Potter", "description": "Boy"}
+        self.data = {
+            "first_name": "Harry",
+            "last_name": "Potter",
+            "description": "Boy",
+        }
 
     def test_can_update_self_user(self):
         self.authenticate(self.signup_data)
         response = self.client.patch(
-            reverse("user", kwargs=self.get_argument(self.signup_data.get("username"))),
+            reverse("user", kwargs=self.get_argument(self.signup_data["username"])),
             self.data,
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -110,7 +123,7 @@ class UpdateUserTest(UserTest):
         response = self.client.patch(
             reverse(
                 "user",
-                kwargs=self.get_argument(self.signup_data_another.get("username")),
+                kwargs=self.get_argument(self.signup_data_another["username"]),
             ),
             {"first_name": "Alex"},
         )
