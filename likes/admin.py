@@ -4,12 +4,12 @@ from .models import Dislike, Like
 
 
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ("post", "timestamp", "user")
+    list_display = ("post", "timestamp", "user", "is_deleted")
     search_fields = ("timestamp", "post")
 
 
 class DislikeAdmin(admin.ModelAdmin):
-    list_display = ("post", "timestamp", "user")
+    list_display = ("post", "timestamp", "user", "is_deleted")
     search_fields = ("timestamp", "post")
 
 

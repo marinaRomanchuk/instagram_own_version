@@ -25,6 +25,7 @@ urlpatterns = [
     path("api/", include("users.urls")),
     path("api/", include("posts.urls")),
     path("api/", include("comments.urls")),
+    path("api/", include("likes.urls")),
     url(r"^api/token/", token_views.obtain_auth_token, name="token"),
 ]
 if settings.DEBUG:
