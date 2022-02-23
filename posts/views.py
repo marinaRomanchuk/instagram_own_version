@@ -1,9 +1,11 @@
 from typing import Union
 
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from instagram_own_version.permissions import IsAuthor
+from likes.models import LikeDislike
 from posts.models import Post
 from posts.serializers import PostSerializer
 from users.models import Followers
@@ -32,3 +34,29 @@ class PostViewSet(viewsets.ModelViewSet):
 
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class LikeDislikeViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk: int):
+        response = "Setted"
+        is_like = self.request.GET.get("like") == "true"
+        if not LikeDislike.objects.filter(post_id=pk).filter(user=request.user):
+            LikeDislike.objects.create(user=request.user, post_id=pk, is_like=is_like)
+        else:
+            like = LikeDislike.objects.get(user=request.user, post_id=pk)
+            if is_like != like.is_like:
+                like.is_like = not like.is_like
+                like.save()
+            else:
+                response = "Like or dislike already exists"
+        return Response(response)
+
+    def destroy(self, request, pk: int) -> Response:
+        response = "Deleted"
+        if LikeDislike.objects.filter(post_id=pk).filter(user=request.user):
+            LikeDislike.objects.get(user=request.user, post_id=pk).delete()
+        else:
+            response = "Not found"
+        return Response(response)
