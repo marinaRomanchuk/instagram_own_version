@@ -1,6 +1,6 @@
 from typing import Union
 
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -40,17 +40,12 @@ class LikeDislikeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, pk: int):
-        response = "Setted"
-        is_like = not ("dislike" in str(request))
+        is_like = "dislike" not in request.path
         LikeDislike.objects.update_or_create(
             user=request.user, post_id=pk, defaults={"is_like": is_like}
         )
-        return Response(response)
+        return Response(status=status.HTTP_201_CREATED)
 
     def destroy(self, request, pk: int) -> Response:
-        response = "Deleted"
-        if LikeDislike.objects.filter(post_id=pk).filter(user=request.user):
-            LikeDislike.objects.get(user=request.user, post_id=pk).delete()
-        else:
-            response = "Not found"
-        return Response(response)
+        LikeDislike.objects.filter(post_id=pk, user=request.user).delete()
+        return Response(status=status.HTTP_200_OK)
