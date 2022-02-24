@@ -34,5 +34,6 @@ urlpatterns = [
     url(r"^posts/create/$", post_create, name="create-post"),
     url(r"^posts/$", posts_list, name="posts-list"),
     url(r"^posts/(?P<pk>\d+)/$", posts_detail, name="post-detail"),
-    url(r"^posts/(?P<pk>\d+)/likes/$", set_like, name="set-like"),
+    url(r"^posts/(?P<pk>\d+)/like/$", set_like, name="set-like"),
+    url(r"^posts/(?P<pk>\d+)/dislike/$", set_like, name="set-dislike"),
 ]

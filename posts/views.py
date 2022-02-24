@@ -41,16 +41,10 @@ class LikeDislikeViewSet(viewsets.ModelViewSet):
 
     def post(self, request, pk: int):
         response = "Setted"
-        is_like = self.request.GET.get("like") == "true"
-        if not LikeDislike.objects.filter(post_id=pk).filter(user=request.user):
-            LikeDislike.objects.create(user=request.user, post_id=pk, is_like=is_like)
-        else:
-            like = LikeDislike.objects.get(user=request.user, post_id=pk)
-            if is_like != like.is_like:
-                like.is_like = not like.is_like
-                like.save()
-            else:
-                response = "Like or dislike already exists"
+        is_like = not ("dislike" in str(request))
+        LikeDislike.objects.update_or_create(
+            user=request.user, post_id=pk, defaults={"is_like": is_like}
+        )
         return Response(response)
 
     def destroy(self, request, pk: int) -> Response:
