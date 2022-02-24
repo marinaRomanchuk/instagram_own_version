@@ -1,9 +1,11 @@
 from typing import Union
 
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from instagram_own_version.permissions import IsAuthor
+from likes.models import LikeDislike
 from posts.models import Post
 from posts.serializers import PostSerializer
 from users.models import Followers
@@ -32,3 +34,18 @@ class PostViewSet(viewsets.ModelViewSet):
 
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class LikeDislikeViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk: int):
+        is_like = "dislike" not in request.path
+        LikeDislike.objects.update_or_create(
+            user=request.user, post_id=pk, defaults={"is_like": is_like}
+        )
+        return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, pk: int) -> Response:
+        LikeDislike.objects.filter(post_id=pk, user=request.user).delete()
+        return Response(status=status.HTTP_200_OK)

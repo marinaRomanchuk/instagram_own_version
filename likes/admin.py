@@ -1,17 +1,11 @@
 from django.contrib import admin
 
-from .models import Dislike, Like
+from .models import LikeDislike
 
 
-class LikeAdmin(admin.ModelAdmin):
-    list_display = ("post", "timestamp", "user")
+class LikeDislikeAdmin(admin.ModelAdmin):
+    list_display = ("post", "timestamp", "user", "is_like")
     search_fields = ("timestamp", "post")
 
 
-class DislikeAdmin(admin.ModelAdmin):
-    list_display = ("post", "timestamp", "user")
-    search_fields = ("timestamp", "post")
-
-
-admin.site.register(Like, LikeAdmin)
-admin.site.register(Dislike, DislikeAdmin)
+admin.site.register(LikeDislike, LikeDislikeAdmin)
