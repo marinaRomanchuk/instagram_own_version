@@ -72,3 +72,47 @@ class ListPostTest(PostTest):
         self.authenticate(self.signup_data_another)
         response = self.client.get(reverse("posts-list"), {"feed": "true"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class LikeDislikeTest(PostTest):
+    def setUp(self):
+        super().setUp()
+        self.authenticate(self.signup_data)
+        response = self.client.post(reverse("create-post"), self.data)
+        self.data["timestamp"] = response.json()["timestamp"]
+        self.data["id"] = Post.objects.get(timestamp=self.data["timestamp"]).id
+
+    def test_set_like_dislike(self):
+        self.authenticate(self.signup_data)
+        response = self.client.post(reverse("set-like", kwargs={"pk": self.data["id"]}))
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.post(
+            reverse("set-dislike", kwargs={"pk": self.data["id"]})
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_number_of_likes_dislikes(self):
+        self.authenticate(self.signup_data)
+        self.client.post(reverse("set-like", kwargs={"pk": self.data["id"]}))
+        self.authenticate(self.signup_data_another)
+        self.client.post(reverse("set-like", kwargs={"pk": self.data["id"]}))
+
+        response = self.client.get(reverse("set-like", kwargs={"pk": self.data["id"]}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual({"count": 2}, response.json())
+
+        response = self.client.get(
+            reverse("set-dislike", kwargs={"pk": self.data["id"]})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual({"count": 0}, response.json())
+
+    def test_delete_like_dislike(self):
+        self.authenticate(self.signup_data)
+        self.client.post(reverse("set-like", kwargs={"pk": self.data["id"]}))
+
+        response = self.client.delete(
+            reverse("set-like", kwargs={"pk": self.data["id"]})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

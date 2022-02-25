@@ -25,6 +25,7 @@ posts_detail = PostViewSet.as_view(
 
 set_like = LikeDislikeViewSet.as_view(
     {
+        "get": "get",
         "post": "post",
         "delete": "destroy",
     }
