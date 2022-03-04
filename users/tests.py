@@ -128,3 +128,24 @@ class UpdateUserTest(UserTest):
             {"first_name": "Alex"},
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class SearchUserTest(UserTest):
+    def setUp(self):
+        super().setUp()
+        self.data.pop("date_of_birth")
+        self.data.pop("email")
+
+        self.search_result = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [self.data],
+        }
+
+    def test_can_search_user(self):
+        self.authenticate(self.signup_data)
+        response = self.client.get(reverse("search_user"), {"search": "Harry"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertEqual(self.search_result, response.json())
