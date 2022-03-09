@@ -35,6 +35,12 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def destroy(self, request, pk: int) -> Response:
+        post = Post.objects.get(id=pk)
+        post.is_deleted = True
+        post.save()
+        return Response(status=status.HTTP_200_OK)
+
 
 class LikeDislikeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

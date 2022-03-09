@@ -6,6 +6,7 @@ class Post(models.Model):
     description = models.TextField(max_length=500, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Post"
