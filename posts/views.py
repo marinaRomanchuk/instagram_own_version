@@ -12,12 +12,12 @@ from users.models import Followers
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(is_deleted=False)
     permission_classes = (IsAuthor,)
     serializer_class = PostSerializer
 
     def list(self, request) -> Response:
-        queryset = Post.objects.all()
+        queryset = Post.objects.filter(is_deleted=False)
 
         try:
             user_id: Union[int, None] = int(self.request.GET.get("user_id"))

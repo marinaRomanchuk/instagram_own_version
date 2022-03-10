@@ -9,12 +9,12 @@ from instagram_own_version.permissions import IsAuthor
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.filter(is_deleted=False)
     permission_classes = (IsAuthor,)
     serializer_class = CommentSerializer
 
     def list(self, request) -> Response:
-        queryset = Comment.objects.all()
+        queryset = Comment.objects.filter(is_deleted=False)
 
         try:
             post_id: Union[int, None] = int(self.request.GET.get("post_id"))
