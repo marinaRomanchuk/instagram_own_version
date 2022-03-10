@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "likes.apps.LikesConfig",
     "rest_framework",
     "rest_framework.authtoken",
+    "drf_yasg",
 ]
 
 REST_FRAMEWORK = {
