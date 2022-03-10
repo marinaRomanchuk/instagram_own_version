@@ -40,9 +40,13 @@ class LikeDislikeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk: int):
-        is_like = "dislike" not in request.path
-        count = LikeDislike.objects.filter(post_id=pk, is_like=is_like).count()
-        return Response({"count": count}, status=status.HTTP_200_OK)
+        counts = {
+            "likes_count": LikeDislike.objects.filter(post_id=pk, is_like=True).count(),
+            "dislike_count": LikeDislike.objects.filter(
+                post_id=pk, is_like=False
+            ).count(),
+        }
+        return Response(counts, status=status.HTTP_200_OK)
 
     def post(self, request, pk: int):
         is_like = "dislike" not in request.path
