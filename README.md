@@ -3,6 +3,17 @@
 A simplified version of Instagram with the ability to add posts,
 set likes or dislikes, follow other people and view your own page.
 
+## Running the project locally
+
+Clone a repository with git clone [url]. Like that
+```
+    git clone https://github.com/marinaRomanchuk/instagram_own_version.git
+```
+To run the project make in terminal
+```
+   python3 manage.py runserver
+```
+
 ## Usage
 
 To use this template, first ensure that you have
