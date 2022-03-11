@@ -1,6 +1,6 @@
 from typing import Union
 
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from comments.models import Comment
@@ -26,3 +26,9 @@ class CommentViewSet(viewsets.ModelViewSet):
 
         serializer = CommentSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def destroy(self, request, pk: int) -> Response:
+        comment = Comment.objects.get(id=pk)
+        comment.is_deleted = True
+        comment.save()
+        return Response(status=status.HTTP_200_OK)

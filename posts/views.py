@@ -35,9 +35,24 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def destroy(self, request, pk: int) -> Response:
+        post = Post.objects.get(id=pk)
+        post.is_deleted = True
+        post.save()
+        return Response(status=status.HTTP_200_OK)
+
 
 class LikeDislikeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk: int):
+        counts = {
+            "likes_count": LikeDislike.objects.filter(post_id=pk, is_like=True).count(),
+            "dislike_count": LikeDislike.objects.filter(
+                post_id=pk, is_like=False
+            ).count(),
+        }
+        return Response(counts, status=status.HTTP_200_OK)
 
     def post(self, request, pk: int):
         is_like = "dislike" not in request.path

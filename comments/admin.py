@@ -4,7 +4,7 @@ from .models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("id", "text", "post", "timestamp", "user")
+    list_display = ("id", "text", "post", "timestamp", "user", "is_deleted")
     search_fields = ("timestamp", "post")
 
 
