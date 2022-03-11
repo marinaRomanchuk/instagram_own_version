@@ -3,7 +3,7 @@ from django.db import models
 
 class CommentManager(models.Manager):
     def get_queryset(self):
-        return super(CommentManager, self).get_queryset().filter(is_deleted=False)
+        return super().get_queryset().filter(is_deleted=False)
 
 
 class Comment(models.Model):
