@@ -36,4 +36,9 @@ urlpatterns = [
     url(r"^posts/(?P<pk>\d+)/$", posts_detail, name="post-detail"),
     url(r"^posts/(?P<pk>\d+)/like/$", set_like, name="set-like"),
     url(r"^posts/(?P<pk>\d+)/dislike/$", set_like, name="set-dislike"),
+    url(
+        r"^posts/(?P<pk>\d+)/likes/count/$",
+        LikeDislikeViewSet.as_view({"get": "get"}),
+        name="likes_count",
+    ),
 ]
