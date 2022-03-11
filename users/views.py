@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import filters, generics
 from rest_framework.permissions import AllowAny
 
 from instagram_own_version.permissions import IsOwner
@@ -24,3 +24,10 @@ class RetrieveUpdateUserProfileView(generics.RetrieveUpdateAPIView):
         if self.request.user == self.get_object():
             return UserPrivateSerializer
         return UserPublicSerializer
+
+
+class SearchUserView(generics.ListAPIView):
+    search_fields = ["username", "first_name", "last_name"]
+    filter_backends = (filters.SearchFilter,)
+    queryset = User.objects.all()
+    serializer_class = UserPublicSerializer
