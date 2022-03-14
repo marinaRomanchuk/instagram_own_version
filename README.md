@@ -45,12 +45,7 @@ If you have created user with another parameters, change dict DATABASES in file 
 
 4. Make your migrations
 
-The only migrations that should appear in each of your app’s migrations folders are called ‘__init__.py’. As we have started a new database, we can delete any existing migrations and migrate from scratch.
-
-In your terminal:
-
 ```
-    $ python manage.py makemigrations
     $ python manage.py migrate
 ```
 
