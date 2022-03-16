@@ -8,43 +8,15 @@ env:
 
 
 jobs:
-  checks:
+  isort:
+    name: runner / isort
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        PYTHON_VERSION: ["3.7", "3.8"]
-
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up cache
-      uses: actions/cache@v1
-      with:
-        path: ${{ env.WORK_DIR }}/.venv
-        key: venv-${{ runner.os }}-${{ matrix.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
-        restore_keys: |
-          venv-${{ runner.os }}-${{ matrix.PYTHON_VERSION }}-${{ hashFiles('**/poetry.lock') }}
-          venv-${{ runner.os }}-${{ matrix.PYTHON_VERSION }}-
-    - name: Install libraries
-      uses: abatilo/actions-poetry@v1.5.0
-      with:
-        python_version: ${{ matrix.PYTHON_VERSION }}
-        poetry_version: ${{ env.POETRY_VERSION }}
-        working_directory: ${{ env.WORK_DIR }}
-        args: install
-
-    - name: Lint with flake8
-      uses: abatilo/actions-poetry@v1.5.0
-      with:
-        python_version: ${{ matrix.PYTHON_VERSION }}
-        poetry_version: ${{ env.POETRY_VERSION }}
-        working_directory: ${{ env.WORK_DIR }}
-        args: run flake8 .
-
-    - name: Import check with isort
-      uses: abatilo/actions-poetry@v1.5.0
-      with:
-        python_version: ${{ matrix.PYTHON_VERSION }}
-        poetry_version: ${{ env.POETRY_VERSION }}
-        working_directory: ${{ env.WORK_DIR }}
-        args: run isort -rc -d -c .
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install isort
+        run: pip install isort
+      - name: Run isort
+        run: isort . --check --diff
