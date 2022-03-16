@@ -8,15 +8,20 @@ env:
 
 
 jobs:
-  isort:
-    name: runner / isort
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
-      - name: Install isort
-        run: pip install isort
-      - name: Run isort
-        run: isort . --check --diff
+          python-version: "3.7"
+
+      - name: Install Pylama
+        run: |
+          python -m pip install pylama
+
+      - name: Run Lint
+        run: |
+          pylama
