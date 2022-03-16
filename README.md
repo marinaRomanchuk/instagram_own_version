@@ -1,5 +1,10 @@
 # instagram_own_version
 
+Status of Last Deployment:<br>
+<img src="https://github.com/marinaRomanchuk/instagram_own_version/workflows/Linters/badge.svg"><br>
+<img src="https://github.com/marinaRomanchuk/instagram_own_version/workflows/Tests/badge.svg"><br>
+
+
 A simplified version of Instagram with the ability to add posts,
 set likes or dislikes, follow other people and view your own page.
 
