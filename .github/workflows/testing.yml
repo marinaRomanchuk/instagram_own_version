@@ -39,6 +39,14 @@ jobs:
       run: |
         poetry run python manage.py test
 
+    - name: Coverage run
+      run: |
+        poetry run coverage run --source='.' manage.py test
+
+    - name: Check coverage
+      run: |
+        poetry run coverage report
+
       env:
         CORE_DB_DATABASE: instagram_project
         CORE_DB_USERNAME: admin
