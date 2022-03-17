@@ -52,6 +52,7 @@ class ListPostTest(PostTest):
         self.authenticate(self.signup_data)
         response = self.client.post(reverse("create-post"), self.data)
         self.data["timestamp"] = response.json()["timestamp"]
+        self.post_id = Post.objects.get(timestamp=self.data["timestamp"]).id
 
         follower = Followers(
             follower=User.objects.get(id=self.signup_data_another.get("id")),
@@ -72,6 +73,18 @@ class ListPostTest(PostTest):
         self.authenticate(self.signup_data_another)
         response = self.client.get(reverse("posts-list"), {"feed": "true"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_can_delete_post(self):
+        self.authenticate(self.signup_data_another)
+        response = self.client.delete(
+            reverse("post-detail", kwargs={"pk": self.post_id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_can_not_delete_post(self):
+        self.authenticate(self.signup_data_another)
+        response = self.client.delete(reverse("post-detail", kwargs={"pk": 100}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class LikeDislikeTest(PostTest):
