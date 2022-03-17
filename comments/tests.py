@@ -91,3 +91,15 @@ class ListCommentTest(CommentTest):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), self.comment_data)
+
+    def test_can_delete_comment(self):
+        self.authenticate(self.signup_data_another)
+        response = self.client.delete(
+            reverse("comment-detail", kwargs={"pk": self.comment_id})
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_can_not_delete_comment(self):
+        self.authenticate(self.signup_data_another)
+        response = self.client.delete(reverse("comment-detail", kwargs={"pk": 100}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

@@ -1,5 +1,6 @@
 from typing import Union
 
+from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 
@@ -28,7 +29,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, pk: int) -> Response:
-        comment = Comment.objects.get(id=pk)
+        comment = get_object_or_404(Comment, pk=pk)
         comment.is_deleted = True
         comment.save()
         return Response(status=status.HTTP_200_OK)
