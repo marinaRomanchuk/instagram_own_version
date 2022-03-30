@@ -11,7 +11,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields: list = ["id", "photo", "description", "timestamp"]
+        fields: list = ["id", "photo", "description", "timestamp", "user_id"]
 
     def create(self, data: Dict[str, str]) -> Post:
         request = self.context.get("request")
