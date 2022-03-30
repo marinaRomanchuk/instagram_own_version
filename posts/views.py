@@ -52,10 +52,10 @@ class LikeDislikeViewSet(viewsets.ModelViewSet):
             "dislike_count": LikeDislike.objects.filter(
                 post_id=pk, is_like=False
             ).count(),
-            "like": LikeDislike.objects.filter(
+            "has_liked": LikeDislike.objects.filter(
                 post_id=pk, user=request.user, is_like=True
             ).exists(),
-            "dislike": LikeDislike.objects.filter(
+            "has_disliked": LikeDislike.objects.filter(
                 post_id=pk, user=request.user, is_like=False
             ).exists(),
         }
