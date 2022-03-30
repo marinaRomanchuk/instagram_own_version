@@ -113,13 +113,29 @@ class LikeDislikeTest(PostTest):
 
         response = self.client.get(reverse("set-like", kwargs={"pk": self.data["id"]}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual({"dislike_count": 0, "likes_count": 2}, response.json())
+        self.assertEqual(
+            {
+                "dislike_count": 0,
+                "likes_count": 2,
+                "has_liked": True,
+                "has_disliked": False,
+            },
+            response.json(),
+        )
 
         response = self.client.get(
             reverse("set-dislike", kwargs={"pk": self.data["id"]})
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual({"dislike_count": 0, "likes_count": 2}, response.json())
+        self.assertEqual(
+            {
+                "dislike_count": 0,
+                "likes_count": 2,
+                "has_liked": True,
+                "has_disliked": False,
+            },
+            response.json(),
+        )
 
     def test_delete_like_dislike(self):
         self.authenticate(self.signup_data)
