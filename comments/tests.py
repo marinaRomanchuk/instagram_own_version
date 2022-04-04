@@ -19,6 +19,14 @@ class CommentTest(APITestCase):
         self.signup_data["id"] = User.objects.get(
             username=self.signup_data.get("username")
         ).id
+        self.user_info = {
+            "username": self.signup_data["username"],
+            "id": self.signup_data["id"],
+            "first_name": "",
+            "last_name": "",
+            "description": None,
+            "profile_photo": None,
+        }
         self.client.post(reverse("signup"), self.signup_data_another)
         self.signup_data_another["id"] = User.objects.get(
             username=self.signup_data_another.get("username")
@@ -63,6 +71,7 @@ class ListCommentTest(CommentTest):
         self.authenticate(self.signup_data)
         response = self.client.post(reverse("comments"), self.comment_data)
         self.comment_data["timestamp"] = response.json()["timestamp"]
+        self.comment_data["user_info"] = self.user_info
         self.comment_id = Comment.objects.get(
             timestamp=self.comment_data["timestamp"]
         ).id

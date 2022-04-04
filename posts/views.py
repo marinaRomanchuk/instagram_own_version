@@ -5,6 +5,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from comments.models import Comment
 from instagram_own_version.permissions import IsAuthor
 from likes.models import LikeDislike
 from posts.models import Post
@@ -49,9 +50,10 @@ class LikeDislikeViewSet(viewsets.ModelViewSet):
     def get(self, request, pk: int):
         counts = {
             "likes_count": LikeDislike.objects.filter(post_id=pk, is_like=True).count(),
-            "dislike_count": LikeDislike.objects.filter(
+            "dislikes_count": LikeDislike.objects.filter(
                 post_id=pk, is_like=False
             ).count(),
+            "comments_count": Comment.objects.filter(post_id=pk).count(),
             "has_liked": LikeDislike.objects.filter(
                 post_id=pk, user=request.user, is_like=True
             ).exists(),

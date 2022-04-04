@@ -111,11 +111,12 @@ class LikeDislikeTest(PostTest):
         self.authenticate(self.signup_data_another)
         self.client.post(reverse("set-like", kwargs={"pk": self.data["id"]}))
 
-        response = self.client.get(reverse("set-like", kwargs={"pk": self.data["id"]}))
+        response = self.client.get(reverse("stats", kwargs={"pk": self.data["id"]}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             {
-                "dislike_count": 0,
+                "comments_count": 0,
+                "dislikes_count": 0,
                 "likes_count": 2,
                 "has_liked": True,
                 "has_disliked": False,
@@ -123,13 +124,12 @@ class LikeDislikeTest(PostTest):
             response.json(),
         )
 
-        response = self.client.get(
-            reverse("set-dislike", kwargs={"pk": self.data["id"]})
-        )
+        response = self.client.get(reverse("stats", kwargs={"pk": self.data["id"]}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             {
-                "dislike_count": 0,
+                "comments_count": 0,
+                "dislikes_count": 0,
                 "likes_count": 2,
                 "has_liked": True,
                 "has_disliked": False,
