@@ -34,7 +34,7 @@ class PostViewSet(viewsets.ModelViewSet):
             ).values_list("following", flat=True)
             queryset = queryset.filter(user__in=following)
 
-        serializer = PostSerializer(queryset, many=True)
+        serializer = PostSerializer(queryset, many=True, context={"request": request})
         return Response(serializer.data)
 
     def destroy(self, request, pk: int) -> Response:
