@@ -15,7 +15,7 @@ class SignupView(generics.CreateAPIView):
     serializer_class = SignupSerializer
 
 
-class RetrieveUpdateUserProfileView(generics.RetrieveUpdateAPIView):
+class RetrieveUserProfileView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     permission_classes = (IsOwner,)
 
@@ -24,6 +24,14 @@ class RetrieveUpdateUserProfileView(generics.RetrieveUpdateAPIView):
         if self.request.user == self.get_object():
             return UserPrivateSerializer
         return UserPublicSerializer
+
+
+class RetrieveUpdateUserProfileView(generics.RetrieveUpdateAPIView):
+    permission_classes = (IsOwner,)
+    serializer_class = UserPrivateSerializer
+
+    def get_object(self):
+        return self.request.user
 
 
 class SearchUserView(generics.ListAPIView):
