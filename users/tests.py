@@ -112,22 +112,8 @@ class UpdateUserTest(UserTest):
 
     def test_can_update_self_user(self):
         self.authenticate(self.signup_data)
-        response = self.client.patch(
-            reverse("user", kwargs=self.get_argument(self.signup_data["username"])),
-            self.data,
-        )
+        response = self.client.patch(reverse("me"), self.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_can_not_update_another_user(self):
-        self.authenticate(self.signup_data)
-        response = self.client.patch(
-            reverse(
-                "user",
-                kwargs=self.get_argument(self.signup_data_another["username"]),
-            ),
-            {"first_name": "Alex"},
-        )
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class SearchUserTest(UserTest):
