@@ -26,7 +26,7 @@ class RetrieveUserProfileView(generics.RetrieveAPIView):
         return UserPublicSerializer
 
 
-class RetrieveUpdateUserProfileView(generics.RetrieveUpdateAPIView):
+class RetrieveUpdateSelfUserProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsOwner,)
     serializer_class = UserPrivateSerializer
 
