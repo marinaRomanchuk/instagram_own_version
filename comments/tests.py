@@ -26,6 +26,7 @@ class CommentTest(APITestCase):
             "last_name": "",
             "description": None,
             "profile_photo": None,
+            "relations": {"followed": False},
         }
         self.client.post(reverse("signup"), self.signup_data_another)
         self.signup_data_another["id"] = User.objects.get(

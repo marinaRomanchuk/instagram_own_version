@@ -1,8 +1,9 @@
-from rest_framework import filters, generics
-from rest_framework.permissions import AllowAny
+from rest_framework import filters, generics, status, viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from instagram_own_version.permissions import IsOwner
-from users.models import User
+from users.models import Followers, User
 from users.serializers import (
     SignupSerializer,
     UserPrivateSerializer,
@@ -39,3 +40,15 @@ class SearchUserView(generics.ListAPIView):
     filter_backends = (filters.SearchFilter,)
     queryset = User.objects.all()
     serializer_class = UserPublicSerializer
+
+
+class FollowerViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, pk: int):
+        Followers.objects.update_or_create(follower=request.user, following_id=pk)
+        return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, pk: int) -> Response:
+        Followers.objects.filter(follower=request.user, following_id=pk).delete()
+        return Response(status=status.HTTP_200_OK)
