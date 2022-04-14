@@ -25,7 +25,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         if post_id:
             queryset = queryset.filter(post_id=post_id)
 
-        serializer = CommentSerializer(queryset, many=True)
+        serializer = CommentSerializer(
+            queryset, many=True, context={"request": request}
+        )
         return Response(serializer.data)
 
     def destroy(self, request, pk: int) -> Response:

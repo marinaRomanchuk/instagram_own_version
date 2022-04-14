@@ -12,13 +12,11 @@ class UserPublicSerializer(serializers.ModelSerializer):
 
     def get_relations(self, obj):
         request = self.context.get("request")
-        if request:
-            return {
-                "followed": Followers.objects.filter(
-                    following=obj.id, follower=request.user
-                ).exists()
-            }
-        return {"followed": False}
+        return {
+            "followed": Followers.objects.filter(
+                following=obj.id, follower=request.user
+            ).exists()
+        }
 
     class Meta:
         model = User
