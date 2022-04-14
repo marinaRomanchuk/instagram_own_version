@@ -9,7 +9,7 @@ from users.views import (
     SignupView,
 )
 
-set_follower = FollowerViewSet.as_view(
+set_following = FollowerViewSet.as_view(
     {
         "post": "post",
         "delete": "destroy",
@@ -21,5 +21,5 @@ urlpatterns = [
     url(r"^users/(?P<pk>\d+)/$", RetrieveUserProfileView.as_view(), name="user"),
     url("users/me/", RetrieveUpdateSelfUserProfileView.as_view(), name="me"),
     url("search/", SearchUserView.as_view(), name="search_user"),
-    url(r"^users/(?P<pk>\d+)/follow/$", set_follower, name="set-follower"),
+    url(r"^users/(?P<pk>\d+)/follow/$", set_following, name="set-follower"),
 ]

@@ -50,5 +50,8 @@ class FollowerViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
     def destroy(self, request, pk: int) -> Response:
-        Followers.objects.filter(follower=request.user, following_id=pk).delete()
-        return Response(status=status.HTTP_200_OK)
+        to_delete = Followers.objects.filter(follower=request.user, following_id=pk)
+        if to_delete:
+            to_delete.delete()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
