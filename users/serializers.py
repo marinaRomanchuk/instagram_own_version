@@ -2,12 +2,21 @@ from django.contrib.auth.password_validation import validate_password
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from users.models import User
+from users.models import Followers, User
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     profile_photo = Base64ImageField()
+    relations = serializers.SerializerMethodField()
+
+    def get_relations(self, obj):
+        request = self.context.get("request")
+        return {
+            "followed": Followers.objects.filter(
+                following=obj.id, follower=request.user
+            ).exists()
+        }
 
     class Meta:
         model = User
@@ -18,6 +27,7 @@ class UserPublicSerializer(serializers.ModelSerializer):
             "last_name",
             "description",
             "profile_photo",
+            "relations",
         ]
 
 

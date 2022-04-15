@@ -36,6 +36,7 @@ class UserTest(APITestCase):
             "username": self.signup_data_another.get("username"),
             "profile_photo": None,
             "id": User.objects.get(username="robinsoncrusoe").id,
+            "relations": {"followed": False},
         }
 
     def get_argument(self, username: str):
@@ -121,6 +122,8 @@ class SearchUserTest(UserTest):
         super().setUp()
         self.data.pop("date_of_birth")
         self.data.pop("email")
+
+        self.data["relations"] = {"followed": False}
 
         self.search_result = {
             "count": 1,
