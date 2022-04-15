@@ -18,6 +18,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = "Post"
         verbose_name_plural = "Posts"
+        ordering = ["-timestamp"]
 
     def __str__(self):
         return f"{self.user.username}'s post"
